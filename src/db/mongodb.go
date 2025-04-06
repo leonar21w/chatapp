@@ -1,0 +1,45 @@
+package db
+
+import (
+	"context"
+	"log"
+	"os"
+	"sync"
+	"time"
+
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
+)
+
+var (
+	clientInstance *mongo.Client
+	clientOnce     sync.Once
+)
+
+func GetMongoClient() (*mongo.Client, error) {
+	var err error
+
+	clientOnce.Do(func() {
+		uri := os.Getenv("MONGODB_URI")
+		if uri == "" {
+			log.Fatal("environment variable is not set")
+		}
+
+		clientOptions := options.Client().ApplyURI(uri)
+		clientInstance, err = mongo.Connect(clientOptions)
+		if err != nil {
+			log.Fatalf("Failed to create MongoDB client: %v", err)
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+
+		if err = clientInstance.Ping(ctx, nil); err != nil {
+			log.Fatalf("Failed to ping MongoDB: %v", err)
+		}
+
+		log.Println("Successfully connected to MongoDB")
+	})
+
+	return clientInstance, err
+}
