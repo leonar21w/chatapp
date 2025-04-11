@@ -38,7 +38,7 @@ func main() {
 	r.Use(gin.Recovery())
 	r.Use(gin.Logger())
 
-	router.Setup(r, repository.NewUserRepository(client))
+	router.Setup(r, repository.NewUserRepo(client))
 
 	if err := r.Run(":" + os.Getenv("PORT")); err != nil {
 		log.Fatalf("Couldn't run server: %v", err)
