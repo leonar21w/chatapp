@@ -7,7 +7,7 @@ import (
 )
 
 type User struct {
-	ID              primitive.ObjectID `bson:"_id,omitempty" json:"id"`  //Accesing the user in mongo
+	ID              primitive.ObjectID `bson:"_id" json:"id"`            //Accesing the user in mongo
 	Username        string             `bson:"username" json:"username"` //user handle like @Leonard, will be unique for all users
 	Name            string             `bson:"name" json:"name"`         //username can conflict
 	Email           string             `bson:"email" json:"email"`       //user emails must be unique for all users

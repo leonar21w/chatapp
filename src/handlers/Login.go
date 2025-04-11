@@ -9,29 +9,28 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	model "github.com/leonar21w/chat-backend/src/models"
 	"github.com/leonar21w/chat-backend/src/repository"
-	"go.mongodb.org/mongo-driver/v2/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func LoginRequest(user *repository.UserRepo) gin.HandlerFunc {
+func LoginRequest(userRepo *repository.UserRepo) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var input model.LoginRequest
 
 		if err := c.ShouldBindJSON(&input); err != nil {
-			c.JSON(400, gin.H{"error": "Invalid request"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 			return
 		}
-		user, err := user.FindByEmail(c, input.Email)
-
-		if err == mongo.ErrNoDocuments {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "email not found"})
-			return
-		}
+		user, err := userRepo.FindByEmail(c, input.Email)
 
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error finding email"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
 		}
 
+		if user == nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "user not found"})
+			return
+		}
 		if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password)); err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect password"})
 			return

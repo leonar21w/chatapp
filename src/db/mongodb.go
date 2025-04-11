@@ -33,7 +33,6 @@ func GetMongoClient() (*mongo.Client, error) {
 		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 		defer cancel()
 
-		// ✅ Correct argument order
 		clientInstance, err = mongo.Connect(clientOptions)
 		if err != nil {
 			log.Fatalf("Failed to create MongoDB client: %v", err)
@@ -43,7 +42,7 @@ func GetMongoClient() (*mongo.Client, error) {
 			log.Fatalf("Failed to ping MongoDB: %v", err)
 		}
 
-		log.Println("✅ Successfully connected to MongoDB")
+		log.Println("Successfully connected to MongoDB")
 	})
 
 	return clientInstance, err

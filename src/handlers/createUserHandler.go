@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	model "github.com/leonar21w/chat-backend/src/models"
 	"github.com/leonar21w/chat-backend/src/repository"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -33,6 +34,7 @@ func RegisterNewUser(userRepo *repository.UserRepo) gin.HandlerFunc {
 		hashP, _ := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
 
 		user := &model.User{
+			ID:       primitive.NewObjectID(),
 			Username: request.Username,
 			Name:     request.Name,
 			Email:    request.Email,

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"log"
 
 	model "github.com/leonar21w/chat-backend/src/models"
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -40,15 +41,14 @@ func (r *UserRepo) EnsureUserIndexes(ctx context.Context) error {
 
 func (r *UserRepo) FindByEmail(ctx context.Context, email string) (*model.User, error) {
 	filter := bson.M{"email": email}
-
 	var user model.User
+	log.Printf("email: %s", email)
 	err := r.col.FindOne(ctx, filter).Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return nil, nil //No user found under this email
+			return nil, nil // No emails found
 		}
-		//An error happened
-		return nil, err
+		return nil, err // error occured
 	}
 	return &user, nil
 }

@@ -14,7 +14,7 @@ func Setup(r *gin.Engine, repo *repository.UserRepo) {
 
 	api := r.Group("/api/v1/auth")
 	api.POST("/register", handlers.RegisterNewUser(repo))
-	api.POST("/Login", handlers.LoginRequest(repo))
+	api.POST("/login", handlers.LoginRequest(repo))
 
 	apiAuthenticated := r.Group("/api/v1")
 	apiAuthenticated.Use(middleware.AuthMiddleware()) //
