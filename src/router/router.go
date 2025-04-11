@@ -12,10 +12,13 @@ func Setup(r *gin.Engine, repo *repository.UserRepo) {
 		c.JSON(200, gin.H{"message": "pong"})
 	})
 
-	api := r.Group("/api/v1/lake")
-	api.Use(middleware.AuthMiddleware())
+	api := r.Group("/api/v1/auth")
+	api.POST("/register", handlers.RegisterNewUser(repo))
+	api.POST("/Login", handlers.LoginRequest(repo))
+
+	apiAuthenticated := r.Group("/api/v1")
+	apiAuthenticated.Use(middleware.AuthMiddleware()) //
 	{
-		api.POST("/user/auth/register", handlers.RegisterNewUser(repo))
 	}
 
 }
