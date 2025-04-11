@@ -19,7 +19,7 @@ func NewUserRepo(client *mongo.Client) *UserRepo {
 	}
 }
 
-func (r *UserRepo) EnsureIndexes(ctx context.Context) error {
+func (r *UserRepo) EnsureUserIndexes(ctx context.Context) error {
 	indexes := []mongo.IndexModel{
 		{
 			Keys:    bson.M{"email": 1},
@@ -28,6 +28,10 @@ func (r *UserRepo) EnsureIndexes(ctx context.Context) error {
 		{
 			Keys:    bson.M{"username": 1},
 			Options: options.Index().SetUnique(true).SetName("unique_username"),
+		},
+		{
+			Keys:    bson.M{"connections": 1},
+			Options: options.Index().SetName("connections_index"),
 		},
 	}
 	_, err := r.col.Indexes().CreateMany(ctx, indexes)

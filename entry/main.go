@@ -24,6 +24,12 @@ func main() {
 		log.Fatalf("Couldn't connect to database: %v", err)
 	}
 
+	userRepo := repository.NewUserRepo(client)
+
+	if err := userRepo.EnsureUserIndexes(context.Background()); err != nil {
+		log.Fatalf("Couldn't ensure user indexes: %v", err)
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	defer func() {
@@ -38,7 +44,7 @@ func main() {
 	r.Use(gin.Recovery())
 	r.Use(gin.Logger())
 
-	router.Setup(r, repository.NewUserRepo(client))
+	router.Setup(r, userRepo)
 
 	if err := r.Run(":" + os.Getenv("PORT")); err != nil {
 		log.Fatalf("Couldn't run server: %v", err)
