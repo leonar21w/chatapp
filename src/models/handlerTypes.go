@@ -12,3 +12,8 @@ type LoginRequest struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required"`
 }
+
+type AddFriendRequest struct {
+	Receiver string `json:"receiver" binding:"required"`
+	Sender   string `json:"sender" binding:"required"`
+}

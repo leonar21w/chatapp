@@ -7,8 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/leonar21w/chat-backend/src/db/repository"
 	model "github.com/leonar21w/chat-backend/src/models"
-	"github.com/leonar21w/chat-backend/src/repository"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -50,7 +50,14 @@ func LoginRequest(userRepo *repository.UserRepo) gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"token": tokenString})
+		c.JSON(http.StatusOK, gin.H{
+			"token":             tokenString,
+			"handler":           user.Username,
+			"displayName":       user.Name,
+			"email":             user.Email,
+			"status":            user.Status,
+			"profilePictureURL": user.ProfileImageURL,
+		})
 	}
 }
 

@@ -13,7 +13,3 @@ func NewConnectionRepo(client *mongo.Client) *ConnectionRepo {
 		col: client.Database("chatapp").Collection("connections"),
 	}
 }
-
-//Add friend, search Friend, remove friend, get friends, block friend, unblock friend
-
-//friend requests lookup, accept, deny, block, unblock

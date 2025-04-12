@@ -2,9 +2,9 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/leonar21w/chat-backend/src/db/repository"
 	"github.com/leonar21w/chat-backend/src/handlers"
 	"github.com/leonar21w/chat-backend/src/middleware"
-	"github.com/leonar21w/chat-backend/src/repository"
 )
 
 func Setup(r *gin.Engine, repo *repository.UserRepo) {

@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/leonar21w/chat-backend/src/db/repository"
 	model "github.com/leonar21w/chat-backend/src/models"
-	"github.com/leonar21w/chat-backend/src/repository"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 )

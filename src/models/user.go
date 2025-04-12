@@ -18,4 +18,5 @@ type User struct {
 
 }
 
-//Create new user -> Post/users
+//The user struct that we should submit to the client will be implemented later, data like last online needs to update
+//Sensitive data like password and ID should not be sent to the client

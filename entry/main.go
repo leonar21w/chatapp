@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/leonar21w/chat-backend/src/db"
-	"github.com/leonar21w/chat-backend/src/repository"
+	"github.com/leonar21w/chat-backend/src/db/repository"
 	"github.com/leonar21w/chat-backend/src/router"
 )
 
