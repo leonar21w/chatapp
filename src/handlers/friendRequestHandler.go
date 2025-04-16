@@ -7,6 +7,7 @@ import (
 	"github.com/leonar21w/chat-backend/src/db/repository"
 	friendRequests "github.com/leonar21w/chat-backend/src/db/repository/friend_requests"
 	model "github.com/leonar21w/chat-backend/src/models"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func SendFriendRequestHandler(requestRepo *friendRequests.FriendRequestRepo, userRepo *repository.UserRepo) gin.HandlerFunc {
@@ -30,18 +31,18 @@ func SendFriendRequestHandler(requestRepo *friendRequests.FriendRequestRepo, use
 			return
 		}
 
-		sender, err := userRepo.FindByHandle(c, request.Sender)
+		senderID, err := GetUserContextID(c)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Error finding user data" + err.Error()})
 			return
 		}
 
-		if sender == nil {
+		if senderID == primitive.NilObjectID {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Something is wrong with the sender data, make sure you are logged in"})
 			return
 		}
 
-		err = requestRepo.RequestAddFriend(c, receiver.ID, sender.ID)
+		err = requestRepo.RequestAddFriend(c, receiver.ID, senderID)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Error sending friend request" + err.Error()})
 			return

@@ -1,5 +1,6 @@
 package model
 
+// The data types here are data types that we EXPECT to receive from the client
 type RegisterRequest struct {
 	Username        string `json:"username" binding:"required"`
 	Name            string `json:"name" binding:"required"`
@@ -16,4 +17,8 @@ type LoginRequest struct {
 type AddFriendRequest struct {
 	Receiver string `json:"receiver" binding:"required"`
 	Sender   string `json:"sender" binding:"required"`
+}
+
+type GetAllFriendRequestsRequest struct {
+	Receiver string `json:"receiver" binding:"required"`
 }

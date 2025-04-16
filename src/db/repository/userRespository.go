@@ -5,6 +5,7 @@ import (
 	"log"
 
 	model "github.com/leonar21w/chat-backend/src/models"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
@@ -63,6 +64,20 @@ func (r *UserRepo) FindByHandle(ctx context.Context, username string) (*model.Us
 			return nil, nil // No emails found
 		}
 		return nil, err // error occured
+	}
+	return &user, nil
+}
+
+func (r *UserRepo) FindByID(ctx context.Context, id primitive.ObjectID) (*model.User, error) {
+	filter := bson.M{"_id": id}
+
+	var user model.User
+	err := r.col.FindOne(ctx, filter).Decode(&user)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, nil
+		}
+		return nil, err
 	}
 	return &user, nil
 }

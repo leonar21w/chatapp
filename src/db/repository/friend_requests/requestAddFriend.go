@@ -29,6 +29,7 @@ func (r *FriendRequestRepo) RequestAddFriend(ctx context.Context, target primiti
 	filter := bson.M{
 		"from_id":   initiator,
 		"target_id": target,
+		"status":    0,
 	}
 
 	update := bson.M{
@@ -43,5 +44,18 @@ func (r *FriendRequestRepo) RequestAddFriend(ctx context.Context, target primiti
 	opts := options.UpdateOne().SetUpsert(true)
 
 	_, err := r.col.UpdateOne(ctx, filter, update, opts)
+	return err
+}
+
+func (r *FriendRequestRepo) EnsureFriendRequestIndexes(ctx context.Context) error {
+	indexModel := mongo.IndexModel{
+		Keys: bson.D{
+			{Key: "from_id", Value: 1},
+			{Key: "target_id", Value: 1},
+		},
+		Options: options.Index().SetUnique(true),
+	}
+
+	_, err := r.col.Indexes().CreateOne(ctx, indexModel)
 	return err
 }

@@ -8,15 +8,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"github.com/leonar21w/chat-backend/main/entry"
 	"github.com/leonar21w/chat-backend/src/db"
-	"github.com/leonar21w/chat-backend/src/db/repository"
 	"github.com/leonar21w/chat-backend/src/router"
 )
 
 func main() {
 	godotenv.Load()
 	gin.SetMode(gin.ReleaseMode)
-
 	//Database
 
 	client, err := db.GetMongoClient()
@@ -24,10 +23,10 @@ func main() {
 		log.Fatalf("Couldn't connect to database: %v", err)
 	}
 
-	userRepo := repository.NewUserRepo(client)
+	repositories, err := entry.RepoInit(context.Background(), client)
 
-	if err := userRepo.EnsureUserIndexes(context.Background()); err != nil {
-		log.Fatalf("Couldn't ensure user indexes: %v", err)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -44,7 +43,7 @@ func main() {
 	r.Use(gin.Recovery())
 	r.Use(gin.Logger())
 
-	router.Setup(r, userRepo)
+	router.Setup(r, repositories)
 
 	if err := r.Run(":" + os.Getenv("PORT")); err != nil {
 		log.Fatalf("Couldn't run server: %v", err)

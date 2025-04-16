@@ -22,3 +22,9 @@ type FriendRequest struct {
 	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
 	Status    int                `bson:"status" json:"status"` // 0: pending, 1: accepted, 2: rejected
 }
+
+type FriendRequestForClient struct {
+	User      UserNotSensitive
+	CreatedAt time.Time `bson:"created_at" json:"created_at"`
+	Status    int       `bson:"status" json:"status"` // 0: pending, 1: accepted, 2: rejected
+}

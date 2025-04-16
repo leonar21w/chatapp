@@ -20,3 +20,10 @@ type User struct {
 
 //The user struct that we should submit to the client will be implemented later, data like last online needs to update
 //Sensitive data like password and ID should not be sent to the client
+
+type UserNotSensitive struct {
+	ID              primitive.ObjectID `bson:"_id" json:"id"`
+	Username        string             `bson:"username" json:"username"` //user handle like @Leonard, will be unique for all users
+	Name            string             `bson:"name" json:"name"`         //username can conflict
+	ProfileImageURL string             `bson:"profile_image_url" json:"profile_image_url"`
+}
